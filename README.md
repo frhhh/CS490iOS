@@ -38,7 +38,9 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 
 Describe any challenges encountered while building the app.
+
 1. Sometimes take some time to find a bug
+
 2. Come with the idea how to show error massage
 
 ## License
