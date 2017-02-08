@@ -22,7 +22,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //error massage when networking error
         errorTextView.isHidden = true
+        self.view.bringSubview(toFront: errorTextView)
         
         // Initialize a UIRefreshControl
         let refreshControl = UIRefreshControl()
@@ -36,33 +38,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         
         // Do any additional setup after loading the view.
-        
-        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        
-        // Display HUD right before the request is made
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        
-        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let data = data {
-                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    print(dataDictionary)
-                    
-                    self.movies = dataDictionary["results"] as! [NSDictionary]
-                    
-                    // Hide HUD once the network request comes back (must be done on main UI thread)
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    
-                    self.tableView.reloadData()
-                }
-            }
-            else {
-                self.errorTextView.isHidden = false
-            }
-        }
-        task.resume()
+        refreshControlAction(nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,7 +79,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // Refresh function
-    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+    func refreshControlAction(_ refreshControl: UIRefreshControl?) {
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
@@ -110,23 +87,31 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let data = data {
-                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+            
+            if let dataUnwrapped = data {
+                if let dataDictionary = try! JSONSerialization.jsonObject(with: dataUnwrapped, options: []) as? NSDictionary {
                     
                     self.movies = dataDictionary["results"] as! [NSDictionary]
                     
                     // Hide HUD once the network request comes back (must be done on main UI thread)
-                    MBProgressHUD.hide(for: self.view, animated: true)
+                    
                     
                     self.tableView.reloadData()
-                    
+                    self.errorTextView.isHidden = true
                     // Tell the refreshControl to stop spinning
-                    refreshControl.endRefreshing()
+                    
+                } else {
+                    print("error converting")
                 }
             }
-            else {
+                
+            if let errorUnwrapped = error {
+                print(errorUnwrapped.localizedDescription)
                 self.errorTextView.isHidden = false
             }
+            refreshControl?.endRefreshing()
+            MBProgressHUD.hide(for: self.view, animated: true)
+            
         }
         task.resume()
     }
