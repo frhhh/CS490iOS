@@ -31,7 +31,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/frhhh/CS490iOS-P1-MovieViewer/blob/master/MovieViewer.gif' width='' alt='Video Walkthrough' />
+<img src='https://github.com/frhhh/MovieViewer/blob/master/MovieViewer.gif' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -91,7 +91,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/frhhh/CS490iOS-P1-MovieViewer/blob/master/MovieViewer02.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/frhhh/MovieViewer/blob/master/MovieViewer02.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
